@@ -6,28 +6,42 @@ on:
       - main
 
 jobs:
-  containerise-model:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # Step 1: Checkout repo
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Docker
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Log in to Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/flask-ml:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/flask-ml:latest
+      # Step 4: Build Docker image
+      - name: Build Docker image
+        run: docker build -t nelsonsama/flask-ml:latest .
 
-  pull-image-job:
-    needs: containerise-model
-    runs-on: ubuntu-latest
-    steps:
-      - name: Pull and run image
-        run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/flask-ml:latest
-          docker run -d -p 5000:5000 ${{ secrets.DOCKER_USERNAME }}/flask-ml:latest
+      # Step 5: Push Docker image to Docker Hub
+      - name: Push Docker image
+        run: docker push nelsonsama/flask-ml:latest
+
+      # Step 6: Deploy to Google VM
+      - name: SSH and deploy to Google VM
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.GCP_VM_IP }}
+          username: njoseph2214
+          key: ${{ secrets.GCP_SSH_KEY }}
+          script: |
+            docker pull nelsonsama/flask-ml:latest
+            docker stop flask1 || true
+            docker rm flask1 || true
+            docker run -d --name flask1 -p 5000:5000 nelsonsama/flask-ml:latest
