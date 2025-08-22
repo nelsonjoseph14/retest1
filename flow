@@ -1,0 +1,197 @@
+step 1 and 2
+
+open the repo link maam provides.
+click fork on top right of the repo and select my git username
+and 
+scrnsht 1 - forked repo in my git hub from maam
+scrnsht 2 - ls <repo-folder> or git remote -v
+
+[njoseph2214@flask2 ~]$ sudo passwd root
+
+[njoseph2214@flask2 ~]$ sudo passwd njoseph2214
+
+[njoseph2214@flask2 ~]$ sudo yum update
+
+[njoseph2214@flask2 ~]$ sudo yum upgrade -y
+
+[njoseph2214@flask2 ~]$ sudo yum install -y yum-utils
+
+[njoseph2214@flask2 ~]$ sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+
+[njoseph2214@flask2 ~]$ sudo yum install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+[njoseph2214@flask2 ~]$ docker compose version
+
+[njoseph2214@flask2 ~]$ sudo systemctl enable docker
+
+[njoseph2214@flask2 ~]$ sudo systemctl start docker
+
+[njoseph2214@flask2 ~]$ sudo usermod -aG docker njoseph2214
+
+[njoseph2214@flask2 ~]$ sudo newgrp docker
+[root@flask2 njoseph2214]# groups
+[root@flask2 njoseph2214]# su njoseph2214
+
+[njoseph2214@flask2 ~]$ docker ps
+scnsht 2
+
+[njoseph2214@flask2 ~]$ sudo yum install -y git
+
+[njoseph2214@flask2 ~]$ git --version
+
+[njoseph2214@flask2 ~]$ git clone https://github.com/nelsonjoseph14/retest1.git
+
+[njoseph2214@flask2 ~]$ cd retest1
+
+[njoseph2214@flask2 retest1]$ ls
+--------
+--------
+step 3
+
+[njoseph2214@flask2 retest1]$ cd ~/retest1
+
+[njoseph2214@flask2 retest1]$ docker build -t retest1:latest .
+
+[njoseph2214@flask2 retest1]$ docker images 
+scrnsht 2 
+
+[njoseph2214@flask2 retest1]$ docker run -d -p 5000:5000 retest1:latest
+
+[njoseph2214@flask2 retest1]$ docker ps
+scrnsht1 
+
+http://external ip from vm:5000 on browser
+scrnsht 3
+-
+optional
+docker stop container id
+docker start container id
+docker rm container id
+docker rmi container id
+-
+docker ps      # check running containers
+docker stop <id>   # stop old one
+docker rm <id>     # remove it
+docker build -t retest1:latest .   # rebuild image
+docker run -d -p 5000:5000 retest1:latest   # run new container
+docker ps         # confirm it’s running
+-
+
+docker login
+nelsonsama
+na@jun007
+
+[njoseph2214@flask2 retest1]$ docker tag retest1:latest nelsonsama/retest1:latest
+
+[njoseph2214@flask2 retest1]$ docker push nelsonsama/retest1:latest
+
+check in docker hub the image
+scrnsht 3
+
+optional
+[njoseph2214@flask2 retest1]$ docker ps
+[njoseph2214@flask2 retest1]$ docker stop f585bd500155
+[njoseph2214@flask2 retest1]$ docker rm f585bd500155
+[njoseph2214@flask2 retest1]$ docker run -d -p 5000:5000 nelsonsama/retest1:latest
+[njoseph2214@flask2 retest1]$ docker ps
+[njoseph2214@flask2 retest1]$ docker logs 209360f73673
+------
+------
+step 4
+
+[njoseph2214@flask2 retest1]$ sudo systemctl status docker
+
+[njoseph2214@flask2 retest1]$ echo $path
+ if empty 
+[njoseph2214@flask2 retest1]$ export PATH=$PATH:/usr/local/bin
+
+
+[njoseph2214@flask2 retest1]$ curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+[njoseph2214@flask2 retest1]$ chmod +x kubectl
+
+[njoseph2214@flask2 retest1]$ sudo mv kubectl /usr/local/bin/kubectl
+
+
+[njoseph2214@flask2 retest1]$ curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+[njoseph2214@flask2 retest1]$ sudo install minikube-linux-amd64 /usr/local/bin/minikube
+
+[njoseph2214@flask2 retest1]$ kubectl version --client
+
+[njoseph2214@flask2 retest1]$ minikube version
+
+[njoseph2214@flask2 retest1]$ minikube start
+
+[njoseph2214@flask2 retest1]$ minikube kubectl -- get po -A
+
+[njoseph2214@flask2 retest1]$ kubectl create deployment hello-minikube --image=kicbase/echo-se
+rver:1.0
+[njoseph2214@flask2 retest1]$ kubectl expose deployment hello-minikube --type=NodePort --port=
+8080
+[njoseph2214@flask2 retest1]$ minikube dashboard --url
+
+
+[njoseph2214@flask2 retest1]$ kubectl create deployment retest1-deployment --image=nelsonsama/retest1:latest
+[njoseph2214@flask2 retest1]$ kubectl expose deployment retest1-deployment --type=NodePort --port=5000 --target-port=5000 --name=retest1-service
+[njoseph2214@flask2 retest1]$ minikube dashboard --url
+
+scrnsht 1 
+[njoseph2214@flask2 retest1]$ minikube status
+[njoseph2214@flask2 retest1]$ kubectl get nodes
+
+scrnsht 2
+[njoseph2214@flask2 retest1]$ kubectl get pods
+[njoseph2214@flask2 retest1]$ kubectl get svc
+
+http://external vm imp:nodeport in svc 
+
+optional:
+minikube tunnel 
+or just run the old browser edit the link with nodeport and take a screenshot.
+--
+--
+step 5
+
+in codespaces
+make a workflow yml file in these path of folders 
+
+a.
+mkdir -p .github/workflows
+cd .github/workflows
+nano cicd-workflow.yml
+add the yml content in it - check docker username in the file
+
+b.
+Go to your repo → Settings → Secrets and variables → Actions → New repository secret
+
+Add:
+
+DOCKER_USERNAME → nelsonsama
+
+DOCKER_PASSWORD → your DockerHub password
+
+c.
+git add .
+git commit - m " "
+git push origin main
+
+d.
+Go to GitHub → Actions → Gird-workflow
+
+Verify:
+
+containerise-model job: image is built and pushed to DockerHub
+
+pull-image-job: image is pulled and container is started
+
+e.
+click on the workflow name on the left side and click on the push 
+u can see both jobs running containerize and image pull 
+final screenshot... 
+
+SUBMIT
+
+
+
+
